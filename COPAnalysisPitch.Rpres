@@ -1,0 +1,101 @@
+Prediction of Colombian Peso Using Machine Learning and Shiny
+========================================================
+author: Ariel E. Meilij
+date: October 28, 2016
+autosize: true
+font-family: 'Helvetica'
+
+Introduction
+========================================================
+
+It is a widely accepted fact among economists that the Colombian Peso exchange rate is tied to the prices of WTI and Brent oil barril, given the country's large oil industry. Analyst and traders follow complicated statistical models in order to judge the volatility of the peso (COP) and play the forex market.
+
+Within my studies, I have tracked the correlation of the Colombian Peso to the international prices of WTI (West Texas) and Brent oil. It is easier to predict the future value of the Colombian Peso (forex symbol COP) with the prices of oil because currency tends to be much more volatile and in the case of Colombia, it is the inflows of oil trading that peg the COP to the US dollar, not the other way around. 
+
+The following Shiny application uses __Machine Learning__ to create three different models using features that include
+
+* WTI prices
+* Brent prices
+* Composite WTI and Brent prices
+
+for creating prediction models using GLM. 
+
+__Note:__ The training and testing data are accurate up to March 2016. 
+
+Algorithm Basics
+========================================================
+
+The Shiny application works via a tabbed view where the user can input her or his forecast of WTI and Brent pil barril, and get predictions with updated ML models of the currency exchange of the Colombian peso using three models:
+
+* GLM with WTI predictor
+* GLM with Brent predictor
+* GLM with composite predictors
+
+The file for training and data sets is accurate to March 2016, and the idea behind the project is to update it weekly and include more evolved features for prediction, such as other major components of Colombia GDP:
+
+* International proce of coal
+* International price of copper
+* International price of emeralds, etc.
+
+Training Models with ML Techniques
+========================================================
+```{r buildModels, eval=FALSE, message=FALSE}
+#Read and review file values
+oilvscop = read.csv("oilvscop_wti_brent_numeric.csv")
+oilvscop$date <- as.Date(oilvscop$date, origin = "1899-12-30")
+
+# Use Machine Learning to build 3 favorite models of COP prediction
+library(caret)
+library(lattice)
+library(ggplot2)
+library(cowplot)
+inTrain <- createDataPartition(y = oilvscop$forex, p = 0.7, list = FALSE)
+training <- oilvscop[inTrain, ]
+testing <- oilvscop[-inTrain, ]
+
+model1 <- train(forex ~ wti, data = oilvscop, method = "glm")
+model2 <- train(forex ~ brent, data = oilvscop, method = "glm")
+model3 <- train(forex ~ wti * brent, data = oilvscop, method = "glm")
+
+# Build prediction models plots with updated testing sets
+p1 = qplot(testing$forex, predict(model1, testing), colour = forex, data = testing) + geom_smooth(method = "lm") + 
+  xlab("Real Forex Value") + ylab("FOREX WTI prediction")
+p2 = qplot(testing$forex, predict(model2, testing), colour = forex, data = testing) + geom_smooth(method = "lm") + 
+  xlab("Real Forex Value") + ylab("FOREX Brent prediction")
+p3 = qplot(testing$forex, predict(model3, testing), colour = forex, data = testing) + geom_smooth(method = "lm") + 
+  xlab("Real Forex Value") + ylab("FOREX Composite prediction")
+plot_grid(p1, p2, p3, align='h')
+
+```
+
+Training Models with ML Techniques (Plot)
+========================================================
+
+```{r buildModelsPlot, echo=FALSE, eval=TRUE, error=FALSE, message=FALSE, warning=FALSE}
+#Read and review file values
+oilvscop = read.csv("oilvscop_wti_brent_numeric.csv")
+oilvscop$date <- as.Date(oilvscop$date, origin = "1899-12-30")
+
+# Use Machine Learning to build 3 favorite models of COP prediction
+library(caret)
+library(lattice)
+library(ggplot2)
+library(cowplot)
+inTrain <- createDataPartition(y = oilvscop$forex, p = 0.7, list = FALSE)
+training <- oilvscop[inTrain, ]
+testing <- oilvscop[-inTrain, ]
+
+model1 <- train(forex ~ wti, data = oilvscop, method = "glm")
+model2 <- train(forex ~ brent, data = oilvscop, method = "glm")
+model3 <- train(forex ~ wti * brent, data = oilvscop, method = "glm")
+
+# Build prediction models plots with updated testing sets
+p1 = qplot(testing$forex, predict(model1, testing), colour = forex, data = testing) + geom_smooth(method = "lm") + 
+  xlab("Real Forex Value") + ylab("FOREX WTI prediction")
+p2 = qplot(testing$forex, predict(model2, testing), colour = forex, data = testing) + geom_smooth(method = "lm") + 
+  xlab("Real Forex Value") + ylab("FOREX Brent prediction")
+p3 = qplot(testing$forex, predict(model3, testing), colour = forex, data = testing) + geom_smooth(method = "lm") + 
+  xlab("Real Forex Value") + ylab("FOREX Composite prediction")
+plot_grid(p1, p2, p3)
+```
+
