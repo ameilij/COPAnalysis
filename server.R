@@ -17,7 +17,7 @@ inTrain <- createDataPartition(y = oilvscop$forex, p = 0.7, list = FALSE)
 training <- oilvscop[inTrain, ]
 testing <- oilvscop[-inTrain, ]
 
-# Model 1 GLM, model 2 LM, model 3 RF
+# models with features WTI, Brent, and Composite
 model1 <- train(forex ~ wti, data = oilvscop, method = "glm")
 model2 <- train(forex ~ brent, data = oilvscop, method = "glm")
 model3 <- train(forex ~ wti * brent, data = oilvscop, method = "glm")
