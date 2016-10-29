@@ -4,12 +4,10 @@
 # The models are based on the GLM, LM, and Random Forest algorithms.
 
 library(shiny)
-library(quantmod)
 
 #Read and review file values
 oilvscop = read.csv("oilvscop_wti_brent_numeric.csv")
 oilvscop$date <- as.Date(oilvscop$date, origin = "1899-12-30")
-copForex <- getFX("USD/COP", source="oanda", from=Sys.Date(), auto.assign = FALSE)
 
 # Use Machine Learning to build 3 favorite models of COP prediction
 library(caret)
@@ -48,7 +46,6 @@ shinyServer(function(input, output) {
   output$out1 <- renderText(paste(textS1, "WTI", predictionWTI()[1], "    | R-square: ", predictionWTI()[2]))
   output$out2 <- renderText(paste(textS1, "Brent", predictionBrent()[1], "    | R-square: ", predictionBrent()[2]))
   output$out3 <- renderText(paste(textS1, "Composite", predictionComposite()[1], "    | R-square: ", predictionComposite()[2]))
-  output$cop <- renderText(as.numeric(copForex))
 
   output$plot1 <- renderPlot({
     qplot(testing$forex, predict(model1, testing), colour = forex, data = testing) + geom_smooth(method = "lm") + 

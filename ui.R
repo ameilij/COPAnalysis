@@ -20,18 +20,16 @@ shinyUI(
         peso (COP) and play the forex market."),
       br(),
       p("In order to predict FOREX for Colombian peso, simply input your estimate of prices for WTI and Brent oil barril."),
-      p("My Machine Learning algorithm work with training and testing data updated to March 2016."),
-      br(),
-      p("COP FOREX TODAY"),
-      textOutput("cop")
+      p("My Machine Learning algorithm work with training and testing data personally collected and updated to March 2016.")
+  
     ),
 
     # Tab panel with plots and predictions according to ML models
     mainPanel(
       tabsetPanel(type = "tabs",
+                  tabPanel("Composite Model", br(), plotOutput("plot3"), br(), textOutput("out3")),
                   tabPanel("WTI Model", br(), plotOutput("plot1"), br(), textOutput("out1")),
-                  tabPanel("Brent Model", br(), plotOutput("plot2"), br(), textOutput("out2")),
-                  tabPanel("Composite Model", br(), plotOutput("plot3"), br(), textOutput("out3"))
+                  tabPanel("Brent Model", br(), plotOutput("plot2"), br(), textOutput("out2"))
     )
   )
 ))
