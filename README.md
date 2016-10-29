@@ -1,6 +1,9 @@
 # COPAnalysis
 Shiny Application for COP Forex Prediction Analysis
 
+### Peer-graded Assignment: Course Project: Shiny Application and Reproducible Pitch
+<hr>
+
 It is a widely accepted fact among economists that the Colombian Peso exchange rate is tied to the prices of WTI and Brent oil barril, given the country's large oil industry. Analyst and traders follow complicated statistical models in order to judge the volatility of the peso (COP) and play the forex market.
 
 Within my studies, I have tracked the correlation of the Colombian Peso to the international prices of WTI (West Texas) and Brent oil. It is easier to predict the future value of the Colombian Peso (forex symbol COP) with the prices of oil because currency tends to be much more volatile and in the case of Colombia, it is the inflows of oil trading that peg the COP to the US dollar, not the other way around. 
